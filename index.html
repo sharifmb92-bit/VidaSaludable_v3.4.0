@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vida Saludable_v 3.4.0</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="apple-touch-icon" href="./icon.svg">
+
+    <style>
+        :root { 
+            --primary: #0f172a; 
+            --accent: #10b981;  
+            --accent-hover: #059669;
+            --orange: #f97316;
+            --orange-hover: #ea580c;
+            --purple: #8b5cf6;
+            --bg: #f8fafc; 
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --subtext: #64748b;
+            --border: #e2e8f0;
+            --soft-blue: #3b82f6;
+            --danger: #ef4444;
+            --warning-bg: #fff7ed;
+            --radius: 20px;
+        }
+
+        [data-theme="dark"] {
+            --primary: #020617;
+            --accent: #10b981;
+            --accent-hover: #34d399;
+            --orange: #fb923c;
+            --orange-hover: #f97316;
+            --purple: #a78bfa;
+            --bg: #1e2224;
+            --card-bg: #27272A;
+            --text: #f8fafc;
+            --subtext: #9CA3AF;
+            --border: #3f464a;
+            --soft-blue: #60a5fa;
+            --danger: #f87171;
+            --warning-bg: #291e1a;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            color: var(--text); 
+            padding-bottom: 85px; 
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        header { 
+            background: linear-gradient(135deg, #0f172a, #1e293b); 
+            color: white; 
+            padding: 22px 18px 18px; 
+            border-radius: 0 0 24px 24px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+        }
+
+        .version-pill {
+            font-size: 0.66rem;
+            color: var(--accent);
+            font-weight: 700;
+            opacity: 0.85;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            font-size: 0.95rem;
+            padding: 7px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .icon-btn:hover { background: rgba(255,255,255,0.25); }
+
+        .profile-banner {
+            max-width: 650px;
+            margin: 12px auto 0;
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 9px 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .stars-badge {
+            background: linear-gradient(45deg, #f59e0b, #f97316);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+        }
+
+        .nav-tabs { 
+            display: flex; 
+            justify-content: space-around; 
+            background: var(--card-bg); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        
+        .tab-btn { 
+            flex: 1;
+            border: none; 
+            background: none; 
+            font-weight: 700; 
+            color: var(--subtext); 
+            padding: 11px 2px; 
+            cursor: pointer; 
+            font-size: 0.68rem;
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .tab-btn.active { 
+            color: var(--accent); 
+            border-bottom: 3px solid var(--accent); 
+        }
+
+        .tab-btn span.icon { font-size: 1.05rem; }
+
+        .main-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .container { padding: 15px; display: none; animation: fadeIn 0.25s ease-out; }
+        .container.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: var(--radius); 
+            padding: 18px; 
+            margin-bottom: 14px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+        }
+        
+        h2 { 
+            margin-top: 0; 
+            font-size: 1.08rem; 
+            color: var(--accent); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            gap: 8px; 
+        }
+
+        .badge {
+            background: var(--orange);
+            color: white;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .badge-purple { background: var(--purple); }
+        .badge-blue { background: var(--soft-blue); }
+
+        .btn { 
+            width: 100%; 
+            border: none; 
+            padding: 12px 14px; 
+            border-radius: 14px; 
+            color: white; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            margin-top: 8px; 
+            cursor: pointer; 
+            transition: 0.18s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+        
+        .btn:active { transform: scale(0.97); }
+        .btn-accent { background: var(--accent); }
+        .btn-accent:hover { background: var(--accent-hover); }
+        .btn-orange { background: var(--orange); }
+        .btn-orange:hover { background: var(--orange-hover); }
+        .btn-purple { background: var(--purple); }
+        .btn-water { background: var(--soft-blue); }
+        .btn-danger { background: var(--danger); }
+        .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); box-shadow: none; }
+        .btn-outline-orange { background: transparent; border: 2px solid var(--orange); color: var(--orange); box-shadow: none; }
+        .btn-outline-purple { background: transparent; border: 2px solid var(--purple); color: var(--purple); box-shadow: none; }
+
+        /* Botones de Mini-Logros Divertidos */
+        .win-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .win-tile {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--text);
+        }
+        .win-tile:active { transform: scale(0.95); }
+        .win-tile.earned {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.12);
+        }
+        .win-emoji { font-size: 1.65rem; }
+        .win-label { font-size: 0.82rem; font-weight: 700; }
+        .win-pts { font-size: 0.72rem; color: var(--orange); font-weight: 800; }
+
+        /* Ruleta de Cenas */
+        .roulette-box {
+            background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(249,115,22,0.12));
+            border: 2px dashed var(--accent);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .roulette-result {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 6px 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes spinPop {
+            0% { transform: scale(0.92); opacity: 0.5; }
+            60% { transform: scale(1.04); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .spin-anim { animation: spinPop 0.35s ease-out; }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.92rem;
+            margin-top: 6px;
+            font-family: inherit;
+        }
+
+        select:focus, input:focus { outline: 2px solid var(--accent); }
+
+        .item { 
+            padding: 11px 13px; 
+            background: var(--bg); 
+            border-radius: 12px;
+            margin-bottom: 8px; 
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid var(--accent);
+            transition: 0.2s;
+        }
+
+        .item.orange-border { border-left-color: var(--orange); }
+        .item.purple-border { border-left-color: var(--purple); }
+        .item.blue-border { border-left-color: var(--soft-blue); }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .checkbox-container input {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .checkbox-container.done span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .progress-container { background: var(--bg); border-radius: 20px; height: 11px; margin: 10px 0; overflow: hidden; border: 1px solid var(--border); }
+        .progress-bar { background: linear-gradient(90deg, var(--soft-blue), var(--accent)); height: 100%; width: 0%; transition: 0.4s ease-in-out; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+        .ai-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 8px 0;
+        }
+
+        .ai-chip {
+            background: var(--bg);
+            border: 1px solid var(--purple);
+            color: var(--text);
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .ai-chip:active {
+            background: var(--purple);
+            color: white;
+        }
+
+        .ai-response-box {
+            background: rgba(139, 92, 246, 0.08);
+            border-left: 4px solid var(--purple);
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 12px;
+            font-size: 0.87rem;
+            line-height: 1.45;
+            display: none;
+        }
+
+        /* Semáforo rápido de alimentos */
+        .traffic-btn {
+            border: 1.5px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            padding: 9px 6px;
+            border-radius: 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            transition: 0.2s;
+        }
+        .traffic-btn.active-green {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .traffic-btn.active-amber {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+        .traffic-btn.active-red {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .traffic-result-card {
+            margin-top: 10px;
+            padding: 13px;
+            border-radius: 14px;
+            font-size: 0.84rem;
+            line-height: 1.42;
+            background: var(--bg);
+            border-left: 5px solid var(--accent);
+        }
+
+        /* Comprobador visual de etiquetas */
+        .label-verdict {
+            margin-top: 10px;
+            padding: 13px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Informe médico */
+        .medical-report-box {
+            background: var(--bg);
+            border: 1.5px solid var(--soft-blue);
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .breathing-box {
+            width: 170px;
+            height: 170px;
+            margin: 18px auto;
+            border: 4px solid var(--purple);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            transition: transform 4s linear, background-color 0.5s;
+        }
+
+        .breathing-box.expand { transform: scale(1.22); background: rgba(139, 92, 246, 0.15); }
+        .breathing-box.hold { transform: scale(1.22); background: rgba(139, 92, 246, 0.3); }
+        .breathing-box.contract { transform: scale(1); background: transparent; }
+
+        .breathing-phase { font-size: 1.05rem; font-weight: 800; color: var(--purple); }
+        .breathing-timer { font-size: 2.1rem; font-weight: 800; color: var(--text); }
+
+        .timer-display {
+            font-size: 2.4rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--orange);
+            font-family: monospace;
+            margin: 8px 0;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+
+        .modal-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 22px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .grocery-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        #toastNotification {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 11px 18px;
+            border-radius: 30px;
+            z-index: 2000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 700;
+            font-size: 0.84rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--accent);
+            max-width: 92%;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 0.75rem;
+            color: var(--subtext);
+        }
+        .medbasha-stamp {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.65;
+        }
+        .hexagon {
+            width: 15px;
+            height: 15px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7px;
+            color: white;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="brand-title">
+            <span style="font-size: 1.4rem;">🥗</span> VIDA SALUDABLE <span class="version-pill">v3.4.0</span>
+        </div>
+        <div class="header-actions">
+            <div class="stars-badge" title="Estrellas Familiares acumuladas">
+                ⭐ <span id="familyStarsDisplay">0</span>
+            </div>
+            <button class="icon-btn" onclick="openProfileModal()" title="Perfil y Ajustes">👤</button>
+            <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Cambiar Tema">🌙</button>
+            <button class="icon-btn" onclick="openTutorialModal()" title="Ayuda">?</button>
+        </div>
+    </div>
+
+    <div class="profile-banner">
+        <span><strong id="currentProfileName" style="color:var(--accent)">🏡 Cuidarnos en Casa</strong></span>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button class="icon-btn" style="padding: 3px 8px; font-size: 0.72rem; background: var(--orange);" onclick="toggleMinViableMode()" id="minViableBtn">⚡ Día Suave</button>
+            <span id="currentDietName" style="opacity: 0.85; font-size: 0.76rem;">Sin Sal ni Azúcar</span>
+        </div>
+    </div>
+</header>
+
+<div class="nav-tabs">
+    <button class="tab-btn active" onclick="openTab('hoy')">
+        <span class="icon">🏠</span>Inicio
+    </button>
+    <button class="tab-btn" onclick="openTab('dieta')">
+        <span class="icon">🥗</span>Menú
+    </button>
+    <button class="tab-btn" onclick="openTab('ia')">
+        <span class="icon">✨</span>IA Cocina
+    </button>
+    <button class="tab-btn" onclick="openTab('fitness')">
+        <span class="icon">🪑</span>Moverse
+    </button>
+    <button class="tab-btn" onclick="openTab('mente')">
+        <span class="icon">🧘</span>Calma
+    </button>
+    <button class="tab-btn" onclick="openTab('progreso')">
+        <span class="icon">🩺</span>Salud
+    </button>
+</div>
+
+<div class="main-wrapper">
+
+    <!-- TAB 1: INICIO (VISUAL, CORTO Y DIVERTIDO) -->
+    <div id="hoy" class="container active">
+        <div id="minViableBanner" class="card" style="display:none; background: var(--warning-bg); border-left: 5px solid var(--orange);">
+            <h2 style="color:var(--orange);">🛡️ Día Suave Activo</h2>
+            <p style="font-size: 0.85rem; margin: 4px 0;">Cero exigencias hoy: <strong>bebe agua despacio, evita la sal y descansa sentada</strong>.</p>
+        </div>
+
+        <!-- GALLETA DE LA SUERTE / CONSEJO IA CORTO -->
+        <div class="card" style="border-left: 5px solid var(--accent);">
+            <h2>🍀 Consejo Rápido <button class="btn btn-outline" style="width:auto; padding:3px 10px; font-size:0.74rem; margin-top:0;" onclick="nextQuickTip()">Otro consejo ↻</button></h2>
+            <p id="smartCoachText" style="font-size: 0.9rem; margin: 4px 0 0 0; line-height: 1.4; font-weight: 500;">Cargando consejo...</p>
+        </div>
+
+        <!-- MINI-LOGROS DE 1 CLIC (ESTRELLAS FAMILIARES) -->
+        <div class="card">
+            <h2>🏆 Mini-Logros de 1 Clic <span class="badge">Gana ⭐</span></h2>
+            <p style="font-size: 0.8rem; color: var(--subtext); margin: 0 0 6px 0;">Toca cada vez que logres un pequeño paso hoy:</p>
+            <div class="win-grid">
+                <button class="win-tile" id="tileWater" onclick="claimMiniWin('water', 10, '💧 ¡+10 ⭐ por hidratarte!')">
+                    <span class="win-emoji">💧</span>
+                    <span class="win-label">+1 Vaso de Agua</span>
+                    <span class="win-pts">+10 ⭐</span>
+                </button>
+                <button class="win-tile" id="tileNoSalt" onclick="claimMiniWin('nosalt', 20, '🧂 ¡+20 ⭐ por comer sin sal!')">
+                    <span class="win-emoji">🥗</span>
+                    <span class="win-label">Comida Sin Sal</span>
+                    <span class="win-pts">+20 ⭐</span>
+                </button>
+                <button class="win-tile" id="tileNoSugar" onclick="claimMiniWin('nosugar', 20, '🍎 ¡+20 ⭐ por elegir sano en vez de dulce!')">
+                    <span class="win-emoji">🍎</span>
+                    <span class="win-label">Fruta / Sin Azúcar</span>
+                    <span class="win-pts">+20 ⭐</span>
+                </button>
+                <button class="win-tile" id="tileMove" onclick="claimMiniWin('move', 15, '🪑 ¡+15 ⭐ por moverte 3 minutos!')">
+                    <span class="win-emoji">🪑</span>
+                    <span class="win-label">Moverse 3 Min</span>
+                    <span class="win-pts">+15 ⭐</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- HIDRATACIÓN VISUAL -->
+        <div class="card">
+            <h2>💧 Vasos de Agua Hoy <span class="badge-blue badge" id="waterMlDisplay">0 / 8 vasos</span></h2>
+            <div class="progress-container"><div id="waterProgressBar" class="progress-bar" style="background:var(--soft-blue)"></div></div>
+            <div class="grid-2">
+                <button class="btn btn-water" onclick="addWater()">+1 Vaso (250ml)</button>
+                <button class="btn btn-outline-purple" onclick="openRainModal()">🧠 Antojo de Dulce</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: MENÚ FAMILIAR -->
+    <div id="dieta" class="container">
+        <div class="card">
+            <h2>🍴 Menú de Hoy <button class="btn btn-outline" style="width:auto; padding:4px 10px; font-size:0.75rem; margin-top:0;" onclick="openGroceryModal()">🛒 Compra</button></h2>
+            
+            <select id="dietTypeSelector" onchange="changeDietFilter(this.value)">
+                <option value="sinsalazucar">❤️ Sin Sal · Sin Azúcar (Tensión)</option>
+                <option value="mediterranea">🥗 Mediterránea Familiar</option>
+                <option value="antiinflamatoria">🌿 Digestión Ligera</option>
+                <option value="vegana">🌱 Vegetariana / Vegana</option>
+                <option value="singluten">🌾 Sin Gluten / Lactosa</option>
+            </select>
+
+            <div id="dietMenuContainer" style="margin-top: 12px;"></div>
+
+            <div class="grid-2" style="margin-top: 10px;">
+                <button class="btn btn-outline" style="font-size:0.78rem;" onclick="openPlateModal()">🍽️ Plato 50/25/25</button>
+                <button class="btn btn-outline-orange" style="font-size:0.78rem;" onclick="openEmergencyMenuModal()">⚡ Platos en 3 Min</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: IA COCINA + RULETA + SEMÁFORO + ETIQUETAS -->
+    <div id="ia" class="container">
+        <!-- RULETA "¿QUÉ CENAMOS HOY?" -->
+        <div class="card">
+            <h2>🎲 Ruleta: ¿Qué Cenamos Hoy? <span class="badge">1 Clic</span></h2>
+            <div class="roulette-box">
+                <div class="roulette-result" id="rouletteText">Toca el botón para elegir una cena rica sin sal ni azúcar 👇</div>
+                <button class="btn btn-orange" onclick="spinDinnerRoulette()">🎲 Girar Ruleta de Cenas</button>
+            </div>
+        </div>
+
+        <!-- COMPROBADOR VISUAL DE ETIQUETAS -->
+        <div class="card">
+            <h2>🔍 Escáner Rápido de Etiquetas <span class="badge-blue badge">Súper</span></h2>
+            <p style="font-size: 0.8rem; color: var(--subtext); margin: 0 0 6px 0;">Mira detrás del paquete (por cada 100g) y pon los dos números:</p>
+            <div class="grid-2">
+                <input type="number" step="0.1" id="labelSaltInput" placeholder="Sal (g) ej: 0.4" oninput="checkProductLabel()">
+                <input type="number" step="0.1" id="labelSugarInput" placeholder="Azúcar (g) ej: 3.5" oninput="checkProductLabel()">
+            </div>
+            <div id="labelVerdictBox" class="label-verdict"></div>
+        </div>
+
+        <!-- SEMÁFORO RÁPIDO DE ALIMENTOS -->
+        <div class="card">
+            <h2>🚦 Semáforo de Alimentos</h2>
+            <input type="text" id="trafficSearchInput" placeholder="Escribe un alimento (ej. queso, plátano, pan...)" oninput="searchFoodTraffic(this.value)">
+
+            <div class="grid-3" style="margin-top: 10px;">
+                <button class="traffic-btn active-green" id="btnTrafficGreen" onclick="showTrafficZone('green')">
+                    <span style="font-size: 1.15rem;">🟢</span>
+                    <span>Bajan Tensión</span>
+                </button>
+                <button class="traffic-btn" id="btnTrafficAmber" onclick="showTrafficZone('amber')">
+                    <span style="font-size: 1.15rem;">🟡</span>
+                    <span>Moderar</span>
+                </button>
+                <button class="traffic-btn" id="btnTrafficRed" onclick="showTrafficZone('red')">
+                    <span style="font-size: 1.15rem;">🔴</span>
+                    <span>Evitar</span>
+                </button>
+            </div>
+
+            <div id="trafficDisplayBox" class="traffic-result-card"></div>
+        </div>
+
+        <!-- COPILOTO IA RECETAS -->
+        <div class="card">
+            <h2 style="color: var(--purple);">✨ IA Cocina Rápida <span class="badge-purple badge">Ideas</span></h2>
+            <div class="ai-chip-row">
+                <button class="ai-chip" onclick="askAI('Postre sin azúcar')">🍰 Postre sin azúcar</button>
+                <button class="ai-chip" onclick="askAI('Guiso sin sal')">🍲 Guiso sin sal</button>
+                <button class="ai-chip" onclick="askAI('Berenjena')">🍆 Berenjena</button>
+                <button class="ai-chip" onclick="askAI('Lentejas')">🫘 Lentejas</button>
+                <button class="ai-chip" onclick="askAI('Pescado')">🐟 Pescado</button>
+                <button class="ai-chip" onclick="askAI('Cansada')">😮‍💨 Día cansado</button>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top: 8px;">
+                <input type="text" id="aiInput" placeholder="Escribe un ingrediente..." style="margin-top:0;" onkeypress="if(event.key==='Enter') handleCustomAI()">
+                <button class="btn btn-purple" style="width:auto; margin-top:0;" onclick="handleCustomAI()">Ver</button>
+            </div>
+
+            <div id="aiResponseBox" class="ai-response-box">
+                <div id="aiResponseText"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: MOVILIDAD SUAVE -->
+    <div id="fitness" class="container">
+        <div class="card">
+            <h2 id="fitnessProfileTitle">🪑 Movilidad Sin Fatiga</h2>
+            <div id="fitnessRoutineContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2>⏱️ Pausa Suave de 3 Minutos</h2>
+            <div class="timer-display" id="activePauseTimerDisplay">03:00</div>
+            <div class="grid-2">
+                <button class="btn btn-accent" id="timerStartBtn" onclick="toggleActivePauseTimer()">Iniciar 3 Min</button>
+                <button class="btn btn-outline-orange" onclick="resetActivePauseTimer()">Reiniciar</button>
+            </div>
+            <button class="btn btn-danger" style="margin-top:12px;" onclick="triggerSOSRelief()">🚨 ALIVIO LUMBAR Y AIRE</button>
+        </div>
+    </div>
+
+    <!-- TAB 5: CALMA Y DESCANSO -->
+    <div id="mente" class="container">
+        <div class="card">
+            <h2>🧘 Respirar para Bajar Tensión <span class="badge-purple badge">2 Min</span></h2>
+            <div class="breathing-box" id="breathingBox">
+                <div class="breathing-phase" id="breathingPhase">Listo</div>
+                <div class="breathing-timer" id="breathingCount">4</div>
+            </div>
+            <button class="btn btn-purple" id="breathingStartBtn" onclick="toggleBreathing()">Iniciar Respiración</button>
+        </div>
+
+        <div class="card">
+            <h2>🌙 Descanso de Anoche</h2>
+            <div class="grid-2">
+                <div>
+                    <label style="font-size:0.78rem; font-weight: bold;">Horas:</label>
+                    <input type="number" step="0.5" id="sleepHoursInput" placeholder="7.5" onchange="saveSleepData()">
+                </div>
+                <div>
+                    <label style="font-size:0.78rem; font-weight: bold;">Energía hoy:</label>
+                    <select id="sleepQualityInput" onchange="saveSleepData()">
+                        <option value="excelente">😊 Con energía</option>
+                        <option value="normal" selected>😐 Normal</option>
+                        <option value="cansado">😫 Cansada</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: SALUD + INFORME MÉDICO -->
+    <div id="progreso" class="container">
+        <div class="card" style="border-left: 5px solid var(--danger);">
+            <h2>🩺 Tensión Arterial <span class="badge" style="background:var(--danger);">Registro</span></h2>
+            <div class="grid-2">
+                <input type="number" id="bpSysInput" placeholder="Alta (ej. 135)" style="margin:0;">
+                <input type="number" id="bpDiaInput" placeholder="Baja (ej. 85)" style="margin:0;">
+            </div>
+            <button class="btn btn-danger" onclick="saveNewBP()">Guardar Tensión</button>
+            <div id="bpHistoryList" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="card">
+            <h2>📉 Control de Peso (Semanal)</h2>
+            <div class="grid-2" style="background:var(--bg); padding:10px; border-radius:14px; margin-bottom:8px;">
+                <div>Actual: <strong id="progWeightCurrent">--</strong> kg</div>
+                <div>Meta: <strong id="progWeightTarget" style="color:var(--accent);">--</strong> kg</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <input type="number" step="0.1" id="newWeightInput" placeholder="Peso (kg)..." style="margin:0;">
+                <button class="btn btn-accent" style="width:auto; margin:0;" onclick="saveNewWeight()">Guardar</button>
+            </div>
+            <div id="historyLogsList" style="margin-top: 10px;"></div>
+        </div>
+
+        <!-- INFORME MÉDICO EN 1 CLIC -->
+        <div class="card" style="border-left: 5px solid var(--soft-blue);">
+            <h2>📄 Informe para el Médico <span class="badge-blue badge">1 Clic</span></h2>
+            <button class="btn btn-water" onclick="generateMedicalReport()">📋 Ver Resumen para Consulta</button>
+            <div id="medicalReportBox" class="medical-report-box"></div>
+        </div>
+
+        <div class="card">
+            <h2>💾 Copia de Seguridad</h2>
+            <div class="grid-2">
+                <button class="btn btn-outline" onclick="exportDataJSON()">📥 Guardar Copia</button>
+                <button class="btn btn-outline-orange" onclick="document.getElementById('importFileInput').click()">📤 Restaurar</button>
+            </div>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importDataJSON(event)">
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="medbasha-stamp">
+        <div class="hexagon">MB</div>
+        <span>medbasha</span>
+    </div>
+</footer>
+
+<!-- MODAL DE BIENVENIDA / INSTRUCCIONES -->
+<div class="modal-overlay" id="tutorialModal">
+    <div class="modal-card">
+        <h2 style="color:var(--accent); margin-bottom:8px;">🏡 Bienvenidos a Vida Saludable</h2>
+        <div class="item">
+            <span style="font-size:0.85rem;"><strong>🏆 Mini-Logros:</strong> Toca los botones de Inicio para sumar Estrellas Familiares ⭐.</span>
+        </div>
+        <div class="item orange-border">
+            <span style="font-size:0.85rem;"><strong>🎲 Ruleta y Escáner:</strong> En IA Cocina gira la ruleta de cenas o comprueba etiquetas del súper en 2 segundos.</span>
+        </div>
+        <div class="item blue-border">
+            <span style="font-size:0.85rem;"><strong>🩺 Informe Médico:</strong> Apunta la tensión y genera un resumen limpio para el médico.</span>
+        </div>
+        <button class="btn btn-accent" style="margin-top:14px; background:#10b981;" onclick="closeTutorialModal()">¡Entendido!</button>
+    </div>
+</div>
+
+<!-- MODALES DE HERRAMIENTAS -->
+<div class="modal-overlay" id="rainModal">
+    <div class="modal-card">
+        <h2 style="color:var(--purple); margin-bottom:6px;">🧠 Pausa de 5 Minutos</h2>
+        <div id="rainStepContainer" style="background:var(--bg); padding:14px; border-radius:16px; border-left:4px solid var(--purple); margin-bottom:12px;">
+            <h3 id="rainStepTitle" style="margin:0 0 4px 0; color:var(--purple); font-size:0.95rem;">1. PARA UN SEGUNDO</h3>
+            <p id="rainStepDesc" style="font-size:0.85rem; margin:0;">Bebe un vaso grande de agua fresca antes de abrir la despensa.</p>
+        </div>
+        <div style="text-align:center; margin:10px 0;">
+            <div style="font-size:2rem; font-weight:bold; color:var(--purple);" id="rainTimerDisplay">05:00</div>
+        </div>
+        <div class="grid-2">
+            <button class="btn btn-purple" onclick="nextRainStep()">Siguiente ▶</button>
+            <button class="btn btn-outline" onclick="closeRainModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="plateModal">
+    <div class="modal-card">
+        <h2 style="color:var(--accent); margin-bottom:8px;">🍽️ El Plato Perfecto</h2>
+        <div class="item"><strong>🥦 Mitad del plato (50%):</strong> Verdura o ensalada sin sal.</div>
+        <div class="item blue-border"><strong>🍗 Un cuarto (25%):</strong> Pollo, pescado, huevo o legumbres.</div>
+        <div class="item orange-border"><strong>🥔 Un cuarto (25%):</strong> Patata cocida, arroz integral o pan sin sal.</div>
+        <button class="btn btn-accent" style="margin-top:12px;" onclick="closePlateModal()">¡Claro!</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="emergencyMenuModal">
+    <div class="modal-card">
+        <h2 style="color:var(--orange); margin-bottom:8px;">⚡ Cenas en 3 Minutos</h2>
+        <div class="item orange-border"><strong>🥗 Garbanzos exprés:</strong> Bote lavado bajo el grifo + atún bajo en sal + tomate + aceite.</div>
+        <div class="item orange-border"><strong>🍳 Tortilla jugosa:</strong> 2 huevos + calabacín rallado + ajo en polvo en sartén.</div>
+        <div class="item orange-border"><strong>🍎 Dulce sano:</strong> Yogur natural sin azúcar + manzana troceada + canela.</div>
+        <button class="btn btn-orange" style="margin-top:12px;" onclick="closeEmergencyMenuModal()">Cerrar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-card">
+        <h2 style="color:var(--accent); margin-bottom:10px;">👤 Ajustes de Casa</h2>
+        <label style="font-size:0.82rem; font-weight:bold;">Nombre Familiar:</label>
+        <input type="text" id="userNameInput" placeholder="Hogar Saludable">
+        <label style="font-size:0.82rem; font-weight:bold; margin-top:10px; display:block;">Ritmo:</label>
+        <select id="userProfileSelector">
+            <option value="hogar">🏡 Cuidarnos en Casa (Suave sin fatiga)</option>
+            <option value="oficina">💻 Oficina / Teletrabajo</option>
+            <option value="conduccion">🚌 Conducción / Transporte</option>
+            <option value="comercio">🧍 Trabajo de Pie</option>
+        </select>
+        <div class="grid-2" style="margin-top:10px;">
+            <div>
+                <label style="font-size:0.82rem; font-weight:bold;">Peso Actual (kg):</label>
+                <input type="number" step="0.1" id="userCurrentWeightInput" placeholder="Opcional">
+            </div>
+            <div>
+                <label style="font-size:0.82rem; font-weight:bold;">Meta (kg):</label>
+                <input type="number" step="0.1" id="userTargetWeightInput" placeholder="Opcional">
+            </div>
+        </div>
+        <button class="btn btn-accent" style="margin-top:16px;" onclick="saveProfileModal()">Guardar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="groceryModal">
+    <div class="modal-card">
+        <h2 style="color:var(--accent); margin-bottom:8px;">🛒 Lista de la Compra</h2>
+        <div id="groceryItemsList"></div>
+        <button class="btn btn-outline" style="margin-top:12px;" onclick="closeGroceryModal()">Cerrar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="sosModal">
+    <div class="modal-card">
+        <h2 style="color:var(--danger); margin-bottom:8px;">🚨 Respira y Descansa</h2>
+        <p id="sosModalContent" style="font-size:0.9rem; line-height:1.45;"></p>
+        <button class="btn btn-danger" onclick="closeSosModal()">Ya estoy mejor</button>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toastNotification">
+    <span id="toastIcon">✨</span> <span id="toastMessage">Notificación</span>
+</div>
+
+<script>
+    const DB_NAME = 'VidaSaludableDB';
+    const DB_VERSION = 1;
+    let db = null;
+
+    function openDatabase() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onerror = () => reject('Error IndexedDB');
+            request.onsuccess = (e) => {
+                db = e.target.result;
+                resolve(db);
+            };
+            request.onupgradeneeded = (e) => {
+                const database = e.target.result;
+                if (!database.objectStoreNames.contains('stateStore')) {
+                    database.createObjectStore('stateStore', { keyPath: 'id' });
+                }
+            };
+        });
+    }
+
+    async function dbGet(key) {
+        if (!db) await openDatabase();
+        return new Promise((resolve) => {
+            const tx = db.transaction('stateStore', 'readonly');
+            const req = tx.objectStore('stateStore').get(key);
+            req.onsuccess = () => resolve(req.result ? req.result.data : null);
+            req.onerror = () => resolve(null);
+        });
+    }
+
+    async function dbSet(key, data) {
+        if (!db) await openDatabase();
+        return new Promise((resolve) => {
+            const tx = db.transaction('stateStore', 'readwrite');
+            tx.objectStore('stateStore').put({ id: key, data });
+            tx.oncomplete = () => resolve();
+        });
+    }
+
+    let appState = {
+        theme: 'light',
+        tutorialSeen: false,
+        familyStars: 0,
+        user: {
+            name: "Hogar Saludable",
+            profile: "hogar",
+            diet: "sinsalazucar",
+            currentWeight: 0,
+            targetWeight: 0
+        },
+        streak: { count: 1, lastDate: new Date().toDateString() },
+        daily: {},
+        weightHistory: [],
+        bpHistory: []
+    };
+
+    const todayKey = new Date().toISOString().slice(0, 10);
+    let isMinViableMode = false;
+
+    const QUICK_NUTRITION_TIPS = [
+        "🍌 El plátano, las espinacas y el calabacín son ricos en potasio: ayudan a expulsar la sal y bajar la tensión.",
+        "🥔 Si cueces patata o arroz y los dejas enfriar en la nevera antes de comerlos, sacian el doble y no suben el azúcar.",
+        "🍋 Un chorrito de limón exprimido engaña al paladar y hace que la comida sepa sabrosa sin una pizca de sal.",
+        "🚰 Beber 1 vaso de agua 10 minutos antes de comer llena el estómago y quita las ganas de repetir.",
+        "🫘 Lavar los garbanzos o lentejas de bote 30 segundos bajo el grifo elimina el 80% de la sal de conserva.",
+        "🍳 Añadir huevo o yogur natural sin azúcar al desayuno evita el cansancio y las ganas de dulce por la tarde.",
+        "🌿 El ajo en polvo, pimentón dulce, comino y orégano dan mucho sabor sin subir la tensión."
+    ];
+    let currentTipIndex = 0;
+
+    const DINNER_ROULETTE_OPTIONS = [
+        "🍳 Tortilla jugosa de calabacín y cebolla con tomate aliñado con orégano",
+        "🐟 Filete de merluza al horno con limón, ajo y pimientos asados",
+        "🥣 Crema suave de calabacín y puerro (sin sal) + 1 huevo duro picado",
+        "🥗 Ensalada templada de garbanzos lavados, tomate, pepino y atún bajo en sal",
+        "🍗 Pechuga de pollo a la plancha con limón y comino + ensalada verde",
+        "🍆 Berenjena asada al microondas con tomate natural, orégano y caballa al natural",
+        "🥬 Revuelto de espinacas con ajo laminado y 2 huevos + tostada integral sin sal"
+    ];
+
+    const rainSteps = [
+        { title: "1. BEBE AGUA PRIMERO", desc: "Toma un vaso grande de agua fresca despacio. Muchas veces la sed se confunde con ganas de dulce." },
+        { title: "2. ESPERA 5 MINUTOS", desc: "Siéntate cómoda y respira lento 4 veces. El impulso fuerte de azúcar dura menos de 5 minutos." },
+        { title: "3. ELIGE DULCE SANO", desc: "Si sigue el hambre: yogur natural con canela, 1 plátano o manzana calentada 2 min con canela." }
+    ];
+    let currentRainStepIndex = 0;
+    let rainTimerInterval = null;
+    let rainTimerSeconds = 300;
+
+    let pauseTimerInterval = null;
+    let pauseTimerSeconds = 180;
+    let pauseTimerRunning = false;
+
+    let breathingInterval = null;
+    let breathingRunning = false;
+
+    function showToast(message, icon = "✨") {
+        const toast = document.getElementById('toastNotification');
+        document.getElementById('toastIcon').innerText = icon;
+        document.getElementById('toastMessage').innerText = message;
+        toast.style.display = 'flex';
+        setTimeout(() => { toast.style.display = 'none'; }, 2800);
+    }
+
+    function getTodayData() {
+        if (!appState.daily[todayKey]) {
+            appState.daily[todayKey] = {
+                water: 0,
+                completedTasks: {},
+                miniWins: {},
+                sleepHours: 7,
+                sleepQuality: "normal"
+            };
+        }
+        if (!appState.daily[todayKey].miniWins) {
+            appState.daily[todayKey].miniWins = {};
+        }
+        return appState.daily[todayKey];
+    }
+
+    function nextQuickTip() {
+        currentTipIndex = (currentTipIndex + 1) % QUICK_NUTRITION_TIPS.length;
+        document.getElementById('smartCoachText').innerText = QUICK_NUTRITION_TIPS[currentTipIndex];
+    }
+
+    function claimMiniWin(winKey, starsToAdd, toastMsg) {
+        const todayData = getTodayData();
+        appState.familyStars = (appState.familyStars || 0) + starsToAdd;
+        todayData.miniWins[winKey] = (todayData.miniWins[winKey] || 0) + 1;
+        if (winKey === 'water') {
+            todayData.water += 250;
+        }
+        showToast(toastMsg, "⭐");
+        saveState();
+    }
+
+    function spinDinnerRoulette() {
+        const el = document.getElementById('rouletteText');
+        el.classList.remove('spin-anim');
+        void el.offsetWidth;
+        const randomDinner = DINNER_ROULETTE_OPTIONS[Math.floor(Math.random() * DINNER_ROULETTE_OPTIONS.length)];
+        el.innerText = randomDinner;
+        el.classList.add('spin-anim');
+    }
+
+    function checkProductLabel() {
+        const saltVal = parseFloat(document.getElementById('labelSaltInput').value);
+        const sugarVal = parseFloat(document.getElementById('labelSugarInput').value);
+        const box = document.getElementById('labelVerdictBox');
+
+        if (isNaN(saltVal) && isNaN(sugarVal)) {
+            box.style.display = 'none';
+            return;
+        }
+
+        const salt = isNaN(saltVal) ? 0 : saltVal;
+        const sugar = isNaN(sugarVal) ? 0 : sugarVal;
+
+        box.style.display = 'block';
+
+        if (salt > 1.0 || sugar > 12.0) {
+            box.style.background = 'rgba(239, 68, 68, 0.15)';
+            box.style.color = 'var(--danger)';
+            box.innerHTML = '🔴 ¡TRAMPA OCULTA! Demasiada sal o azúcar. Mejor déjalo en la estantería.';
+        } else if (salt > 0.3 || sugar > 5.0) {
+            box.style.background = 'rgba(249, 115, 22, 0.15)';
+            box.style.color = 'var(--orange)';
+            box.innerHTML = '🟡 UN POQUITO VALE: Tómalo en ración pequeña o lávalo si es conserva.';
+        } else {
+            box.style.background = 'rgba(16, 185, 129, 0.15)';
+            box.style.color = 'var(--accent)';
+            box.innerHTML = '🟢 ¡A LA CESTA! Muy bajo en sal y azúcar. Perfecto para casa.';
+        }
+    }
+
+    const TRAFFIC_ZONES = {
+        green: {
+            border: "var(--accent)",
+            title: "🟢 Bajan la Tensión (Consumo Libre)",
+            items: [
+                "<strong>Verduras frescas:</strong> Calabacín, berenjena, espinacas, brócoli, tomate, pepino, pimiento y cebolla.",
+                "<strong>Fruta entera:</strong> Plátano, manzana, pera, naranja y kiwi.",
+                "<strong>Frescos sin procesar:</strong> Huevos, pollo/pavo natural, merluza, salmón, sardinas y lentejas.",
+                "<strong>Sabor sin sal:</strong> Aceite de oliva, ajo, limón, pimentón, comino y orégano."
+            ]
+        },
+        amber: {
+            border: "var(--orange)",
+            title: "🟡 Moderar Cantidad",
+            items: [
+                "<strong>Legumbres de bote:</strong> Lávalas 30 seg bajo el grifo (quita el 80% de sal).",
+                "<strong>Atún en lata:</strong> Siempre 'al natural' o 'bajo en sal'.",
+                "<strong>Pan integral:</strong> Solo etiquetado 'Sin sal añadida'.",
+                "<strong>Lácteos y frutos secos:</strong> Yogur natural sin azúcar y nueces crudas sin sal."
+            ]
+        },
+        red: {
+            border: "var(--danger)",
+            title: "🔴 Evitar (Sal o Azúcar Oculta)",
+            items: [
+                "<strong>Embutidos y quesos curados:</strong> Jamón serrano, chorizo, salchichas y queso curado.",
+                "<strong>Salsas y pastillas:</strong> Avecrem, salsa de soja, kétchup y sopas de sobre.",
+                "<strong>Aperitivos:</strong> Aceitunas, patatas de bolsa y frutos secos salados.",
+                "<strong>Dulces:</strong> Galletas, bollería, refrescos y zumos envasados."
+            ]
+        }
+    };
+
+    const TRAFFIC_FOOD_INDEX = [
+        { palabras: ['platano', 'plátano', 'manzana', 'pera', 'naranja', 'kiwi', 'fruta'], zona: 'green', nota: '🟢 Verde: Fruta entera rica en potasio para bajar la tensión.' },
+        { palabras: ['calabacin', 'calabacín', 'berenjena', 'espinaca', 'brocoli', 'brócoli', 'tomate', 'pepino', 'verdura', 'ensalada', 'cebolla', 'ajo'], zona: 'green', nota: '🟢 Verde: Verdura fresca. Llena el estómago sin sodio ni calorías.' },
+        { palabras: ['pollo', 'pavo', 'merluza', 'salmon', 'salmón', 'pescado', 'huevo', 'huevos'], zona: 'green', nota: '🟢 Verde: Proteína fresca muy saciante y sin sal añadida.' },
+        { palabras: ['yogur', 'leche', 'queso fresco'], zona: 'amber', nota: '🟡 Ámbar: Elige yogur natural sin azúcar y queso fresco 0% sal.' },
+        { palabras: ['pan', 'tostada', 'arroz', 'pasta', 'avena'], zona: 'amber', nota: '🟡 Ámbar: Busca pan integral "sin sal añadida" y raciones moderadas.' },
+        { palabras: ['atun', 'atún', 'lata', 'garbanzo', 'lenteja'], zona: 'amber', nota: '🟡 Ámbar: Si es de bote o lata, lávalo bajo el grifo o cómpralo bajo en sal.' },
+        { palabras: ['queso curado', 'curado', 'manchego', 'quesitos'], zona: 'red', nota: '🔴 Rojo: Muchísima sal oculta. Cámbialo por queso fresco sin sal.' },
+        { palabras: ['jamon', 'jamón', 'chorizo', 'embutido', 'salchicha', 'fuet'], zona: 'red', nota: '🔴 Rojo: Dispara la tensión arterial por su exceso de sodio.' },
+        { palabras: ['aceituna', 'oliva', 'encurtido', 'patatas fritas'], zona: 'red', nota: '🔴 Rojo: Retiene líquidos y sube la tensión.' },
+        { palabras: ['galleta', 'bolleria', 'bollería', 'chocolate', 'azucar', 'azúcar', 'refresco', 'zumo', 'pastel'], zona: 'red', nota: '🔴 Rojo: Sube el azúcar de golpe y da más hambre al rato.' },
+        { palabras: ['avecrem', 'pastilla', 'caldo', 'soja', 'ketchup', 'salsa'], zona: 'red', nota: '🔴 Rojo: Bomba de sal. Usa ajo, laurel, pimentón y limón.' }
+    ];
+
+    function showTrafficZone(zoneKey) {
+        const zone = TRAFFIC_ZONES[zoneKey];
+        const box = document.getElementById('trafficDisplayBox');
+        document.getElementById('trafficSearchInput').value = '';
+
+        document.getElementById('btnTrafficGreen').className = 'traffic-btn' + (zoneKey === 'green' ? ' active-green' : '');
+        document.getElementById('btnTrafficAmber').className = 'traffic-btn' + (zoneKey === 'amber' ? ' active-amber' : '');
+        document.getElementById('btnTrafficRed').className = 'traffic-btn' + (zoneKey === 'red' ? ' active-red' : '');
+
+        box.style.borderLeftColor = zone.border;
+        box.innerHTML = `
+            <strong style="display:block; margin-bottom:6px;">${zone.title}</strong>
+            <ul style="margin:0; padding-left:18px;">
+                ${zone.items.map(i => `<li style="margin-bottom:4px;">${i}</li>`).join('')}
+            </ul>
+        `;
+    }
+
+    function searchFoodTraffic(queryText) {
+        const q = queryText.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (!q) {
+            showTrafficZone('green');
+            return;
+        }
+
+        const found = TRAFFIC_FOOD_INDEX.find(entry => 
+            entry.palabras.some(p => q.includes(p.normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
+        );
+
+        const box = document.getElementById('trafficDisplayBox');
+        document.getElementById('btnTrafficGreen').className = 'traffic-btn';
+        document.getElementById('btnTrafficAmber').className = 'traffic-btn';
+        document.getElementById('btnTrafficRed').className = 'traffic-btn';
+
+        if (found) {
+            const colors = { green: 'var(--accent)', amber: 'var(--orange)', red: 'var(--danger)' };
+            box.style.borderLeftColor = colors[found.zona];
+            box.innerHTML = `<strong>${found.nota}</strong>`;
+        } else {
+            box.style.borderLeftColor = 'var(--soft-blue)';
+            box.innerHTML = `<strong>🔍 Regla para "${queryText}":</strong> Si es fresco sin envase es 🟢 Verde. Si viene en paquete, usa el Escáner de Etiquetas de arriba.`;
+        }
+    }
+
+    const PROFILE_CONFIGS = {
+        hogar: {
+            name: "Cuidarnos en Casa",
+            icon: "🏡",
+            sos: "🚨 Siéntate recta, apoya los pies, toma aire 4 segundos por la nariz y suéltalo 6 segundos por la boca.",
+            exercises: [
+                "🪑 Sentada: Subir puntas de pies y talones (1 min)",
+                "🌬️ Sentada: Abrir pecho y respirar lento (5 veces)",
+                "🦵 Sentada: Subir suavemente una rodilla y otra (1 min)",
+                "🚶‍♀️ Paseo muy despacio por el pasillo (3 min)"
+            ]
+        },
+        oficina: {
+            name: "Oficina / Teletrabajo",
+            icon: "💻",
+            sos: "🚨 Ponte de pie, entrelaza las manos detrás de la espalda y abre el pecho 15 segundos.",
+            exercises: [
+                "🪑 Sentadillas suaves en silla (10 reps)",
+                "🙆‍♂️ Abrir pecho y hombros (10 reps)",
+                "🔄 Girar cuello y hombros suave (15 seg)",
+                "🚶 Caminar ligero 5 minutos"
+            ]
+        },
+        conduccion: {
+            name: "Conducción / Transporte",
+            icon: "🚌",
+            sos: "🚨 En parada segura, apoya manos en la zona lumbar y arquea suave hacia atrás.",
+            exercises: [
+                "🌉 Puente de glúteo en casa (12 reps)",
+                "🐱 Estiramiento gato-camello suave (10 reps)",
+                "🧘 Estirar piernas sin impacto",
+                "🚶 Caminata tranquila (5 min)"
+            ]
+        },
+        comercio: {
+            name: "Trabajo de Pie",
+            icon: "🧍",
+            sos: "🚨 Siéntate 3 minutos y mueve los tobillos en círculos.",
+            exercises: [
+                "🦶 Elevar talones suave (12 reps)",
+                "🔄 Círculos de tobillos sentada",
+                "🪑 Descanso lumbar sentada",
+                "🦵 Estirar gemelos suave"
+            ]
+        }
+    };
+
+    const DIET_PLANS = {
+        sinsalazucar: {
+            name: "Sin Sal · Sin Azúcar",
+            menu: [
+                { label: "🌅 Desayuno", text: "Tostada integral sin sal con aceite de oliva y tomate + café o infusión sin azúcar" },
+                { label: "🍎 Media Mañana", text: "1 pieza de fruta + 4 nueces crudas sin sal" },
+                { label: "☀️ Almuerzo", text: "Lentejas o garbanzos con mucha verdura, laurel y comino (sin sal) + ensalada" },
+                { label: "🌙 Cena", text: "Tortilla de 2 huevos con espinacas + crema de calabacín sin sal" }
+            ],
+            grocery: ["Pan integral sin sal", "Aceite de oliva virgen extra", "Tomates, pepino y lechuga", "Calabacín, zanahoria y puerro", "Lentejas y garbanzos", "Huevos frescos", "Pollo y pavo natural", "Merluza o salmón", "Yogur natural sin azúcar", "Plátanos, manzanas y limones", "Nueces crudas sin sal", "Ajo en polvo, pimentón, comino y orégano"]
+        },
+        mediterranea: {
+            name: "Mediterránea Familiar",
+            menu: [
+                { label: "🌅 Desayuno", text: "Tostada integral sin sal con tomate, aceite de oliva y huevo" },
+                { label: "🍎 Media Mañana", text: "Fruta de temporada + 4 nueces sin sal" },
+                { label: "☀️ Almuerzo", text: "Pollo a la plancha con limón y orégano + verduras asadas" },
+                { label: "🌙 Cena", text: "Merluza al horno con cebolla y ensalada" }
+            ],
+            grocery: ["Huevos", "Aceite de oliva", "Pan integral sin sal", "Pollo", "Merluza", "Verduras variadas", "Fruta fresca", "Nueces sin sal"]
+        },
+        antiinflamatoria: {
+            name: "Digestión Ligera",
+            menu: [
+                { label: "🌅 Desayuno", text: "Yogur natural sin azúcar con avena, canela y plátano" },
+                { label: "🍎 Media Mañana", text: "Almendras crudas sin sal e infusión" },
+                { label: "☀️ Almuerzo", text: "Salmón a la plancha con brócoli y patata cocida" },
+                { label: "🌙 Cena", text: "Crema de calabaza sin sal con pavo a la plancha" }
+            ],
+            grocery: ["Yogur natural sin azúcar", "Avena y canela", "Salmón", "Brócoli y patata", "Calabaza", "Pavo natural", "Almendras crudas"]
+        },
+        vegana: {
+            name: "Vegetariana / Vegana",
+            menu: [
+                { label: "🌅 Desayuno", text: "Avena con manzana y canela" },
+                { label: "🍎 Media Mañana", text: "Pera y 4 nueces" },
+                { label: "☀️ Almuerzo", text: "Garbanzos salteados con espinacas y pimentón" },
+                { label: "🌙 Cena", text: "Crema de verduras sin sal con tofu" }
+            ],
+            grocery: ["Avena", "Garbanzos", "Espinacas", "Tofu", "Verduras", "Fruta y nueces"]
+        },
+        singluten: {
+            name: "Sin Gluten / Lactosa",
+            menu: [
+                { label: "🌅 Desayuno", text: "Tortitas de arroz sin sal con aguacate y limón" },
+                { label: "🍎 Media Mañana", text: "Fruta fresca y nueces" },
+                { label: "☀️ Almuerzo", text: "Arroz integral con pollo y verduras" },
+                { label: "🌙 Cena", text: "Tortilla de calabacín" }
+            ],
+            grocery: ["Tortitas arroz sin sal", "Aguacate y limón", "Arroz integral", "Pollo y huevos", "Calabacín"]
+        }
+    };
+
+    const diccionarioIA = [
+        {
+            claves: ['postre', 'dulce', 'ansiedad', 'chocolate', 'tarta', 'bizcocho', 'galleta'],
+            contenido: `
+                🍰 <strong>Postres Rápidos Sin Azúcar:</strong><br>
+                • <strong>Manzana asada:</strong> En gajos con canela y limón, 3 min al microondas.<br>
+                • <strong>Helado cremoso:</strong> Tritura 1 plátano congelado con 1 cucharadita de cacao puro.<br>
+                • <strong>Bizcocho en taza (2 min):</strong> 1 huevo + medio plátano aplastado + 2 cucharadas de avena + canela al microondas.
+            `
+        },
+        {
+            claves: ['guiso', 'cuchara', 'potaje', 'estofado', 'caldo', 'sopa'],
+            contenido: `
+                🍲 <strong>Guiso Casero Sin Sal:</strong><br>
+                • Sofríe cebolla, ajo, puerro y tomate rallado con aceite de oliva.<br>
+                • Añade pimentón dulce, laurel y comino en lugar de sal o pastillas.<br>
+                • Un trozo de apio y perejil fresco dan todo el sabor natural al caldo.
+            `
+        },
+        {
+            claves: ['lenteja', 'garbanzo', 'alubia', 'legumbre'],
+            contenido: `
+                🫘 <strong>Legumbres Aliadas:</strong><br>
+                • <strong>Lentejas de huerta:</strong> Con calabacín, zanahoria, ajo, laurel y pimentón (mucho potasio para bajar tensión).<br>
+                • <strong>De bote:</strong> Lávalas 30 seg bajo el grifo para quitar el 80% de sal.
+            `
+        },
+        {
+            claves: ['berenjena', 'pisto', 'calabacin', 'calabacín'],
+            contenido: `
+                🍆 <strong>Berenjena en 5 Minutos:</strong><br>
+                • Pártela por la mitad, haz cortes en cruz, pon ajo picado, orégano y aceite de oliva. 6 min al microondas tapada y lista.
+            `
+        },
+        {
+            claves: ['pescado', 'merluza', 'salmon', 'salmón', 'sardina', 'caballa'],
+            contenido: `
+                🐟 <strong>Pescado Jugoso Sin Sal:</strong><br>
+                • Al horno o sartén tapada con rodajas de tomate, cebolla fina, ajo, perejil y chorrito de limón al final.
+            `
+        },
+        {
+            claves: ['cansada', 'aire', 'fatiga', 'escalera', 'pesada'],
+            contenido: `
+                😮‍💨 <strong>Día de Poco Aire:</strong><br>
+                • No te exijas hoy: siéntate cómoda, respira lento (4 seg aire, 6 seg soltar) y cena ligero (crema templada o tortilla francesa).
+            `
+        }
+    ];
+
+    function handleCustomAI() {
+        const input = document.getElementById('aiInput').value.trim();
+        if (!input) {
+            showToast('Escribe un ingrediente', '✨');
+            return;
+        }
+        askAI(input);
+    }
+
+    function askAI(promptText) {
+        const box = document.getElementById('aiResponseBox');
+        const out = document.getElementById('aiResponseText');
+        const q = promptText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        let coincidencias = [];
+        diccionarioIA.forEach(cat => {
+            if (cat.claves.some(c => q.includes(c.normalize("NFD").replace(/[\u0300-\u036f]/g, "")))) {
+                coincidencias.push(cat.contenido);
+            }
+        });
+
+        if (coincidencias.length > 0) {
+            out.innerHTML = coincidencias.join('<hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">');
+        } else {
+            out.innerHTML = `
+                ✨ <strong>Idea rápida con "${promptText}":</strong><br>
+                • Cocínalo a la plancha o guisado con ajo, cebolla, aceite de oliva y limón.<br>
+                • Usa pimentón, comino u orégano en lugar de sal y acompaña con ensalada.
+            `;
+        }
+        box.style.display = 'block';
+    }
+
+    function generateMedicalReport() {
+        const box = document.getElementById('medicalReportBox');
+        let bpText = "Sin tomas de tensión registradas aún.";
+
+        if (appState.bpHistory && appState.bpHistory.length > 0) {
+            const total = appState.bpHistory.length;
+            const sumSys = appState.bpHistory.reduce((acc, item) => acc + parseInt(item.sys), 0);
+            const sumDia = appState.bpHistory.reduce((acc, item) => acc + parseInt(item.dia), 0);
+            const avgSys = Math.round(sumSys / total);
+            const avgDia = Math.round(sumDia / total);
+            const latest = appState.bpHistory[0];
+
+            bpText = `
+                • <strong>Promedio (${total} tomas):</strong> ${avgSys} / ${avgDia} mmHg<br>
+                • <strong>Última toma (${latest.date}):</strong> ${latest.sys} / ${latest.dia} mmHg
+            `;
+        }
+
+        const weightText = appState.user.currentWeight > 0
+            ? `${appState.user.currentWeight.toFixed(1)} kg (Meta: ${appState.user.targetWeight > 0 ? appState.user.targetWeight.toFixed(1) + ' kg' : 'En seguimiento'})`
+            : "Sin registro de peso";
+
+        box.innerHTML = `
+            <strong style="color:var(--soft-blue); display:block; margin-bottom:6px;">📋 INFORME DE SEGUIMIENTO EN CASA</strong>
+            ${bpText}<br>
+            • <strong>Peso actual:</strong> ${weightText}<br>
+            • <strong>Pauta alimentaria:</strong> Dieta mediterránea sin sal ni azúcares añadidos.<br>
+            • <strong>Estrellas familiares acumuladas:</strong> ${appState.familyStars || 0} ⭐
+        `;
+        box.style.display = 'block';
+        showToast("Resumen médico generado.", "🩺");
+    }
+
+    async function saveState() {
+        await dbSet('appState', appState);
+        updateAllUI();
+    }
+
+    function applyTheme() {
+        if (appState.theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeBtn').innerText = '☀️';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            document.getElementById('themeBtn').innerText = '🌙';
+        }
+    }
+
+    function toggleTheme() {
+        appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
+        applyTheme();
+        saveState();
+    }
+
+    function openTab(tabId) {
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(`'${tabId}'`));
+        if (activeBtn) activeBtn.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function updateAllUI() {
+        const todayData = getTodayData();
+        const profileConfig = PROFILE_CONFIGS[appState.user.profile] || PROFILE_CONFIGS.hogar;
+        const dietPlan = DIET_PLANS[appState.user.diet] || DIET_PLANS.sinsalazucar;
+
+        document.getElementById('currentProfileName').innerText = `${profileConfig.icon} ${profileConfig.name}`;
+        document.getElementById('currentDietName').innerText = dietPlan.name;
+        document.getElementById('familyStarsDisplay').innerText = appState.familyStars || 0;
+
+        // Iluminar botones de mini-logros usados hoy
+        ['water', 'nosalt', 'nosugar', 'move'].forEach(key => {
+            const btnId = 'tile' + key.charAt(0).toUpperCase() + key.slice(1).replace('salt', 'Salt').replace('sugar', 'Sugar');
+            const el = document.getElementById(btnId);
+            if (el) {
+                if (todayData.miniWins && todayData.miniWins[key] > 0) {
+                    el.classList.add('earned');
+                } else {
+                    el.classList.remove('earned');
+                }
+            }
+        });
+
+        const vasos = Math.floor(todayData.water / 250);
+        document.getElementById('waterMlDisplay').innerText = `${vasos} / 8 vasos`;
+        document.getElementById('waterProgressBar').style.width = Math.min((todayData.water / 2000) * 100, 100) + '%';
+
+        document.getElementById('dietTypeSelector').value = appState.user.diet;
+        renderDietMenu(dietPlan, todayData);
+
+        document.getElementById('fitnessProfileTitle').innerText = `🪑 Movilidad: ${profileConfig.name}`;
+        renderFitnessRoutine(profileConfig, todayData);
+
+        document.getElementById('progWeightCurrent').innerText = appState.user.currentWeight > 0 ? appState.user.currentWeight.toFixed(1) : '--';
+        document.getElementById('progWeightTarget').innerText = appState.user.targetWeight > 0 ? appState.user.targetWeight.toFixed(1) : '--';
+
+        if (todayData.sleepHours) document.getElementById('sleepHoursInput').value = todayData.sleepHours;
+        if (todayData.sleepQuality) document.getElementById('sleepQualityInput').value = todayData.sleepQuality;
+
+        renderHistoryLogs();
+    }
+
+    function renderDietMenu(dietPlan, todayData) {
+        const container = document.getElementById('dietMenuContainer');
+        container.innerHTML = dietPlan.menu.map((item, idx) => {
+            const taskId = `diet_${idx}`;
+            const checked = !!todayData.completedTasks[taskId];
+            return `
+            <div class="item">
+                <label class="checkbox-container ${checked ? 'done' : ''}">
+                    <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleTask('${taskId}')">
+                    <div style="display:flex; flex-direction:column;">
+                        <small style="color:var(--accent); font-weight:bold; font-size:0.72rem;">${item.label}</small>
+                        <span style="font-weight:500; font-size:0.88rem;">${item.text}</span>
+                    </div>
+                </label>
+            </div>`;
+        }).join('');
+    }
+
+    function renderFitnessRoutine(profileConfig, todayData) {
+        const container = document.getElementById('fitnessRoutineContainer');
+        container.innerHTML = profileConfig.exercises.map((item, idx) => {
+            const taskId = `fit_${idx}`;
+            const checked = !!todayData.completedTasks[taskId];
+            return `
+            <div class="item orange-border">
+                <label class="checkbox-container ${checked ? 'done' : ''}">
+                    <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleTask('${taskId}')">
+                    <span style="font-weight:500; font-size:0.88rem;">${item}</span>
+                </label>
+            </div>`;
+        }).join('');
+    }
+
+    function toggleTask(taskId) {
+        const todayData = getTodayData();
+        todayData.completedTasks[taskId] = !todayData.completedTasks[taskId];
+        if (todayData.completedTasks[taskId]) {
+            appState.familyStars = (appState.familyStars || 0) + 10;
+            showToast("¡+10 ⭐ completado!", "✅");
+        }
+        saveState();
+    }
+
+    function addWater() {
+        claimMiniWin('water', 10, "💧 +1 Vaso de agua (+10 ⭐)");
+    }
+
+    function changeDietFilter(newDiet) {
+        appState.user.diet = newDiet;
+        showToast("Menú actualizado.", "🥗");
+        saveState();
+    }
+
+    function triggerSOSRelief() {
+        const profileConfig = PROFILE_CONFIGS[appState.user.profile] || PROFILE_CONFIGS.hogar;
+        document.getElementById('sosModalContent').innerText = profileConfig.sos;
+        document.getElementById('sosModal').classList.add('active');
+    }
+
+    function closeSosModal() { document.getElementById('sosModal').classList.remove('active'); }
+
+    function toggleMinViableMode() {
+        isMinViableMode = !isMinViableMode;
+        const banner = document.getElementById('minViableBanner');
+        const btn = document.getElementById('minViableBtn');
+        if (isMinViableMode) {
+            banner.style.display = 'block';
+            btn.style.background = 'var(--danger)';
+            btn.innerText = '⚡ Día Suave (ON)';
+            showToast("Modo suave activado.", "🛡️");
+        } else {
+            banner.style.display = 'none';
+            btn.style.background = 'var(--orange)';
+            btn.innerText = '⚡ Día Suave';
+        }
+    }
+
+    function openTutorialModal() { document.getElementById('tutorialModal').classList.add('active'); }
+    function closeTutorialModal() {
+        appState.tutorialSeen = true;
+        document.getElementById('tutorialModal').classList.remove('active');
+        saveState();
+    }
+
+    function openRainModal() {
+        currentRainStepIndex = 0;
+        updateRainStepUI();
+        document.getElementById('rainModal').classList.add('active');
+        startRainTimer();
+    }
+
+    function closeRainModal() {
+        clearInterval(rainTimerInterval);
+        document.getElementById('rainModal').classList.remove('active');
+    }
+
+    function updateRainStepUI() {
+        const step = rainSteps[currentRainStepIndex];
+        document.getElementById('rainStepTitle').innerText = step.title;
+        document.getElementById('rainStepDesc').innerText = step.desc;
+    }
+
+    function nextRainStep() {
+        currentRainStepIndex = (currentRainStepIndex + 1) % rainSteps.length;
+        updateRainStepUI();
+    }
+
+    function startRainTimer() {
+        clearInterval(rainTimerInterval);
+        rainTimerSeconds = 300;
+        rainTimerInterval = setInterval(() => {
+            rainTimerSeconds--;
+            const m = Math.floor(rainTimerSeconds / 60).toString().padStart(2, '0');
+            const s = (rainTimerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('rainTimerDisplay').innerText = `${m}:${s}`;
+            if (rainTimerSeconds <= 0) {
+                clearInterval(rainTimerInterval);
+                document.getElementById('rainTimerDisplay').innerText = "00:00 - ¡Logrado!";
+            }
+        }, 1000);
+    }
+
+    function openPlateModal() { document.getElementById('plateModal').classList.add('active'); }
+    function closePlateModal() { document.getElementById('plateModal').classList.remove('active'); }
+
+    function openEmergencyMenuModal() { document.getElementById('emergencyMenuModal').classList.add('active'); }
+    function closeEmergencyMenuModal() { document.getElementById('emergencyMenuModal').classList.remove('active'); }
+
+    function openProfileModal() {
+        document.getElementById('userNameInput').value = appState.user.name || '';
+        document.getElementById('userProfileSelector').value = appState.user.profile || 'hogar';
+        document.getElementById('userCurrentWeightInput').value = appState.user.currentWeight || '';
+        document.getElementById('userTargetWeightInput').value = appState.user.targetWeight || '';
+        document.getElementById('profileModal').classList.add('active');
+    }
+
+    function saveProfileModal() {
+        appState.user.name = document.getElementById('userNameInput').value || 'Hogar Saludable';
+        appState.user.profile = document.getElementById('userProfileSelector').value;
+        appState.user.currentWeight = parseFloat(document.getElementById('userCurrentWeightInput').value) || 0;
+        appState.user.targetWeight = parseFloat(document.getElementById('userTargetWeightInput').value) || 0;
+        document.getElementById('profileModal').classList.remove('active');
+        showToast("Ajustes guardados.", "🏡");
+        saveState();
+    }
+
+    function openGroceryModal() {
+        const dietPlan = DIET_PLANS[appState.user.diet] || DIET_PLANS.sinsalazucar;
+        const container = document.getElementById('groceryItemsList');
+        container.innerHTML = dietPlan.grocery.map(item => `
+            <div class="grocery-item">
+                <input type="checkbox" style="width:18px; height:18px; margin:0; accent-color:var(--accent);">
+                <span>${item}</span>
+            </div>
+        `).join('');
+        document.getElementById('groceryModal').classList.add('active');
+    }
+
+    function closeGroceryModal() { document.getElementById('groceryModal').classList.remove('active'); }
+
+    function toggleActivePauseTimer() {
+        if (pauseTimerRunning) {
+            clearInterval(pauseTimerInterval);
+            pauseTimerRunning = false;
+            document.getElementById('timerStartBtn').innerText = "Reanudar";
+        } else {
+            pauseTimerRunning = true;
+            document.getElementById('timerStartBtn').innerText = "Pausar";
+            pauseTimerInterval = setInterval(() => {
+                pauseTimerSeconds--;
+                updateActivePauseTimerDisplay();
+                if (pauseTimerSeconds <= 0) {
+                    clearInterval(pauseTimerInterval);
+                    pauseTimerRunning = false;
+                    claimMiniWin('move', 15, "🎉 ¡3 Minutos logrados! +15 ⭐");
+                    resetActivePauseTimer();
+                }
+            }, 1000);
+        }
+    }
+
+    function resetActivePauseTimer() {
+        clearInterval(pauseTimerInterval);
+        pauseTimerRunning = false;
+        pauseTimerSeconds = 180;
+        updateActivePauseTimerDisplay();
+        document.getElementById('timerStartBtn').innerText = "Iniciar 3 Min";
+    }
+
+    function updateActivePauseTimerDisplay() {
+        const m = Math.floor(pauseTimerSeconds / 60).toString().padStart(2, '0');
+        const s = (pauseTimerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('activePauseTimerDisplay').innerText = `${m}:${s}`;
+    }
+
+    function toggleBreathing() {
+        const box = document.getElementById('breathingBox');
+        const phaseEl = document.getElementById('breathingPhase');
+        const countEl = document.getElementById('breathingCount');
+        const btn = document.getElementById('breathingStartBtn');
+
+        if (breathingRunning) {
+            clearInterval(breathingInterval);
+            breathingRunning = false;
+            box.className = 'breathing-box';
+            phaseEl.innerText = "Listo";
+            countEl.innerText = "4";
+            btn.innerText = "Iniciar Respiración";
+        } else {
+            breathingRunning = true;
+            btn.innerText = "Detener";
+            const phases = [
+                { name: "Toma aire", class: "expand" },
+                { name: "Mantén", class: "hold" },
+                { name: "Suelta suave", class: "contract" },
+                { name: "Descansa", class: "contract" }
+            ];
+            let stepIndex = 0;
+            let counter = 4;
+            phaseEl.innerText = phases[0].name;
+            box.className = `breathing-box ${phases[0].class}`;
+
+            breathingInterval = setInterval(() => {
+                counter--;
+                countEl.innerText = counter;
+                if (counter <= 0) {
+                    counter = 4;
+                    stepIndex = (stepIndex + 1) % phases.length;
+                    phaseEl.innerText = phases[stepIndex].name;
+                    box.className = `breathing-box ${phases[stepIndex].class}`;
+                }
+            }, 1000);
+        }
+    }
+
+    function saveSleepData() {
+        const todayData = getTodayData();
+        todayData.sleepHours = parseFloat(document.getElementById('sleepHoursInput').value) || 7;
+        todayData.sleepQuality = document.getElementById('sleepQualityInput').value;
+        showToast("Descanso guardado.", "🌙");
+        saveState();
+    }
+
+    function saveNewBP() {
+        const sys = parseInt(document.getElementById('bpSysInput').value);
+        const dia = parseInt(document.getElementById('bpDiaInput').value);
+        if (isNaN(sys) || isNaN(dia) || sys < 60 || dia < 30) {
+            showToast("Pon tensión alta y baja válidas.", "🩺");
+            return;
+        }
+        if (!appState.bpHistory) appState.bpHistory = [];
+        appState.bpHistory.unshift({
+            date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+            sys,
+            dia
+        });
+        appState.familyStars = (appState.familyStars || 0) + 15;
+        document.getElementById('bpSysInput').value = '';
+        document.getElementById('bpDiaInput').value = '';
+        showToast("✅ Tensión guardada (+15 ⭐)", "🩺");
+        saveState();
+    }
+
+    function saveNewWeight() {
+        const val = parseFloat(document.getElementById('newWeightInput').value);
+        if (!isNaN(val) && val > 30 && val < 300) {
+            appState.user.currentWeight = val;
+            appState.weightHistory.unshift({
+                date: new Date().toLocaleDateString('es-ES'),
+                weight: val
+            });
+            document.getElementById('newWeightInput').value = '';
+            showToast("✅ Peso guardado.", "📉");
+            saveState();
+        }
+    }
+
+    function renderHistoryLogs() {
+        const bpContainer = document.getElementById('bpHistoryList');
+        if (!appState.bpHistory || appState.bpHistory.length === 0) {
+            bpContainer.innerHTML = "<p style='font-size:0.8rem; color:var(--subtext);'>Sin tomas aún.</p>";
+        } else {
+            bpContainer.innerHTML = appState.bpHistory.slice(0, 5).map(item => `
+                <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:0.84rem;">
+                    <span>🩺 ${item.date}</span>
+                    <strong>${item.sys} / ${item.dia} mmHg</strong>
+                </div>
+            `).join('');
+        }
+
+        const container = document.getElementById('historyLogsList');
+        if (!appState.weightHistory || appState.weightHistory.length === 0) {
+            container.innerHTML = "<p style='font-size:0.8rem; color:var(--subtext);'>Sin registros aún.</p>";
+        } else {
+            container.innerHTML = appState.weightHistory.slice(0, 4).map(item => `
+                <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:0.84rem;">
+                    <span>📅 ${item.date}</span>
+                    <strong>${item.weight.toFixed(1)} kg</strong>
+                </div>
+            `).join('');
+        }
+    }
+
+    function exportDataJSON() {
+        const jsonStr = JSON.stringify(appState, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `vida_saludable_v3_4_0_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("Copia descargada.", "📥");
+    }
+
+    function importDataJSON(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (imported && typeof imported === 'object') {
+                    appState = imported;
+                    saveState();
+                    applyTheme();
+                    showToast("Datos restaurados.", "✅");
+                }
+            } catch (err) {
+                showToast("Archivo no válido.", "❌");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    async function initApp() {
+        if ('storage' in navigator && 'persist' in navigator.storage) {
+            navigator.storage.persist();
+        }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(()=>{});
+        }
+
+        await openDatabase();
+        const saved = await dbGet('appState');
+        if (saved) {
+            appState = { ...appState, ...saved };
+        }
+
+        if (!appState.tutorialSeen) {
+            openTutorialModal();
+        }
+
+        document.getElementById('smartCoachText').innerText = QUICK_NUTRITION_TIPS[0];
+        showTrafficZone('green');
+        applyTheme();
+        updateAllUI();
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
